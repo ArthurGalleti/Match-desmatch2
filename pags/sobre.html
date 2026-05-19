@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Match ou Desmatch - Sobre</title>
+
+  <link rel="stylesheet" href="../estilos/style2.css">
+  <link rel="stylesheet" href="../estilos/sobre.css">
+
+  <!-- Ícones -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  >
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="Captura_de_tela_2026-05-09_164629-removebg-preview (1).png"
+  >
+
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff006e">
+
+</head>
+
+<body>
+
+  <!-- MENU LATERAL -->
+  <div class="sidebar" id="sidebar">
+
+    <div class="sidebar-top">
+
+      <button id="closeMenu">
+
+        <i class="fa-solid fa-xmark"></i>
+
+      </button>
+
+    </div>
+
+    <div class="sidebar-links">
+
+      <a href="jogar.html">
+        Início
+      </a>
+
+      <a href="sobre.html">
+        Sobre nós
+      </a>
+
+      <a href="contato.html">
+        Contate-nos
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- CONTAINER -->
+  <div class="container">
+
+    <!-- TOPO -->
+    <header>
+
+      <button class="menu-btn" id="openMenu">
+
+        <i class="fa-solid fa-bars"></i>
+
+      </button>
+
+    </header>
+
+    <!-- LOGO -->
+    <div class="logo">
+
+      <img
+        src="Captura_de_tela_2026-05-09_164629-removebg-preview (1).png"
+        alt="Logo"
+        class="logo-img"
+      >
+
+    </div>
+
+    <!-- CONTEÚDO -->
+    <main>
+
+      <h2>SOBRE NÓS</h2>
+
+      <div class="sobre-texto">
+
+        <p>
+          O Match ou Desmatch foi criado para trazer diversão
+          e interação entre amigos.
+        </p>
+
+        <p>
+          Nosso objetivo é transformar perguntas simples
+          em partidas rápidas e engraçadas, onde cada resposta
+          pode gerar um match… ou um desmatch.
+        </p>
+
+        <p>
+          Com uma interface moderna e fácil de usar,
+          o jogo foi desenvolvido para criar momentos
+          divertidos em qualquer lugar.
+        </p>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+
+    const sidebar = document.getElementById("sidebar");
+
+    const openMenu = document.getElementById("openMenu");
+
+    const closeMenu = document.getElementById("closeMenu");
+
+
+    openMenu.addEventListener("click", () => {
+
+      sidebar.classList.add("active");
+
+    });
+
+
+    closeMenu.addEventListener("click", () => {
+
+      sidebar.classList.remove("active");
+
+    });
+
+  </script>
+
+
+<script>
+
+if ("serviceWorker" in navigator) {
+
+  navigator.serviceWorker.register("./sw.js");
+
+}
+
+</script>
+</body>
+</html> 

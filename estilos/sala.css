@@ -1,0 +1,550 @@
+/* RESET */
+
+*{
+
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+}
+
+
+/* BODY */
+
+body{
+
+  min-height: 100vh;
+
+  background: linear-gradient(
+
+    180deg,
+
+    #ff007f,
+
+    #ff3d5e
+
+  );
+
+  color: white;
+
+}
+
+
+/* CONTAINER */
+
+.container{
+
+  width: 100%;
+
+  max-width: 700px;
+
+  margin: 0 auto;
+
+  padding: 20px;
+
+}
+
+
+/* HEADER */
+
+header{
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin-top: 10px;
+
+  margin-bottom: 50px;
+
+}
+
+
+header h1{
+
+  font-size: 4rem;
+
+  font-weight: 900;
+
+  text-shadow: 0 4px 6px rgba(0,0,0,0.3);
+
+}
+
+
+header span{
+
+  font-size: 2rem;
+
+  font-weight: bold;
+
+}
+
+
+/* STATUS */
+
+.status-box{
+
+  width: 100%;
+
+  text-align: center;
+
+  margin-bottom: 40px;
+
+}
+
+
+.status-box h2{
+
+  font-size: 1.4rem;
+
+  font-weight: bold;
+
+}
+
+
+/* MAIN */
+
+main{
+
+  width: 100%;
+
+}
+
+
+/* PERGUNTA */
+
+#questionTitle{
+
+  text-align: center;
+
+  font-size: 2rem;
+
+  line-height: 1.4;
+
+  font-weight: bold;
+
+  margin-bottom: 50px;
+
+  text-shadow: 0 3px 4px rgba(0,0,0,0.25);
+
+}
+
+
+/* ÁREA BRANCA */
+
+#optionsContainer{
+
+  background: #ececec;
+
+  border-radius: 45px;
+
+  padding: 40px;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 25px;
+
+}
+
+
+/* BOTÕES */
+
+.option-btn{
+
+  border: none;
+
+  border-radius: 22px;
+
+  min-height: 90px;
+
+  padding: 20px;
+
+  cursor: pointer;
+
+  font-size: 1.1rem;
+
+  font-weight: bold;
+
+  color: white;
+
+  background: linear-gradient(
+
+    90deg,
+
+    #ff6b6b,
+
+    #ff1493
+
+  );
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+
+  transition: 0.2s;
+
+}
+
+
+.option-btn:hover{
+
+  transform: scale(1.03);
+
+}
+
+
+.option-btn:active{
+
+  transform: scale(0.98);
+
+}
+
+
+/* FINAL */
+
+.finish-box{
+
+  text-align: center;
+
+  margin-top: 40px;
+
+}
+
+
+.finish-box h2{
+
+  font-size: 2rem;
+
+}
+
+
+/* RESPONSIVO */
+
+@media(max-width: 700px){
+
+  header h1{
+
+    font-size: 3rem;
+
+  }
+
+  header span{
+
+    font-size: 1.4rem;
+
+  }
+
+  #questionTitle{
+
+    font-size: 1.4rem;
+
+  }
+
+  #optionsContainer{
+
+    grid-template-columns: 1fr;
+
+    padding: 25px;
+
+  }
+
+}
+
+
+
+/* ========================= */
+/* HUD */
+/* ========================= */
+
+.top-game-info{
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 25px;
+
+}
+
+
+.score-box{
+
+  background: rgba(255,255,255,0.15);
+
+  border: 2px solid rgba(255,255,255,0.15);
+
+  backdrop-filter: blur(10px);
+
+  padding: 12px 18px;
+
+  border-radius: 18px;
+
+  font-size: 1rem;
+
+  font-weight: bold;
+
+  color: white;
+
+}
+
+
+.question-count{
+
+  background: rgba(255,255,255,0.15);
+
+  border: 2px solid rgba(255,255,255,0.15);
+
+  backdrop-filter: blur(10px);
+
+  padding: 12px 18px;
+
+  border-radius: 18px;
+
+  font-size: 1rem;
+
+  font-weight: bold;
+
+  color: white;
+
+}
+
+
+/* ========================= */
+/* RESULTADO */
+/* ========================= */
+
+.result-box{
+
+  background: #ececec;
+
+  padding: 40px;
+
+  border-radius: 35px;
+
+  text-align: center;
+
+  color: #ff1493;
+
+  animation: popIn 0.5s ease;
+
+}
+
+
+.result-box h2{
+
+  font-size: 2rem;
+
+  margin-bottom: 20px;
+
+}
+
+
+.final-score{
+
+  font-size: 2.5rem;
+
+  font-weight: bold;
+
+  margin-bottom: 25px;
+
+}
+
+
+/* ========================= */
+/* ANIMAÇÕES */
+/* ========================= */
+
+.fade-out{
+
+  animation: fadeOut 0.4s forwards;
+
+}
+
+
+.fade-in{
+
+  animation: fadeIn 0.4s forwards;
+
+}
+
+
+.phase-change{
+
+  animation: pulsePhase 0.8s ease;
+
+}
+
+
+@keyframes fadeOut{
+
+  from{
+
+    opacity: 1;
+
+    transform: translateY(0);
+
+  }
+
+  to{
+
+    opacity: 0;
+
+    transform: translateY(25px);
+
+  }
+
+}
+
+
+@keyframes fadeIn{
+
+  from{
+
+    opacity: 0;
+
+    transform: translateY(-25px);
+
+  }
+
+  to{
+
+    opacity: 1;
+
+    transform: translateY(0);
+
+  }
+
+}
+
+
+@keyframes pulsePhase{
+
+  0%{
+
+    transform: scale(1);
+
+  }
+
+  50%{
+
+    transform: scale(1.08);
+
+  }
+
+  100%{
+
+    transform: scale(1);
+
+  }
+
+}
+
+
+@keyframes popIn{
+
+  from{
+
+    opacity: 0;
+
+    transform: scale(0.7);
+
+  }
+
+  to{
+
+    opacity: 1;
+
+    transform: scale(1);
+
+  }
+
+}
+
+/* TIMER */
+
+.timer-bar{
+  width: 100%;
+  max-width: 500px;
+  height: 6px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 10px auto 0;
+}
+
+.timer-fill{
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg,#ff4d6d,#ff758f);
+  border-radius: 999px;
+}
+
+.timer-animar{
+  animation: diminuirTempo 15s linear forwards;
+}
+
+@keyframes diminuirTempo{
+
+  from{
+    width: 100%;
+  }
+
+  to{
+    width: 0%;
+  }
+
+}
+
+/* BOTÃO VOLTAR */
+
+.back-btn{
+
+  margin-top: 25px;
+
+  border: none;
+
+  padding: 14px 28px;
+
+  border-radius: 18px;
+
+  cursor: pointer;
+
+  font-size: 1rem;
+
+  font-weight: bold;
+
+  color: white;
+
+  background: linear-gradient(
+    90deg,
+    #ff1493,
+    #ff4d6d
+  );
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+
+  transition: 0.2s;
+
+}
+
+.back-btn:hover{
+
+  transform: scale(1.05);
+
+}
+
+.back-btn:active{
+
+  transform: scale(0.97);
+
+}

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Match ou Desmatch - Sala</title>
+
+  <link rel="stylesheet" href="../estilos/sala.css">
+
+  <link rel="icon" type="image/png" href="Captura_de_tela_2026-05-09_164629-removebg-preview (1).png">
+
+
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff006e">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <header>
+
+      <h1>MATCH</h1>
+
+      <span id="roomCodeText"></span>
+
+    </header>
+
+    <div class="status-box">
+
+      <h2 id="statusText">
+        Aguardando jogador...
+      </h2>
+
+    </div>
+
+    <div class="phase-text" id="phaseText">
+
+      Escolha suas respostas
+
+    </div>
+
+    <!-- TIMER -->
+    <div class="timer-bar">
+      <div class="timer-fill" id="timer"></div>
+    </div>
+
+    <br>
+
+    <div class="top-game-info">
+
+      <div class="score-box">
+
+        ⭐ <span id="scoreText">0</span>
+
+      </div>
+
+      <div class="question-count" id="questionCount">
+
+        1 / 5
+
+      </div>
+
+    </div>
+
+    <main id="gameContainer" style="display: none;">
+
+      <h2 id="questionTitle"></h2>
+
+      <div id="optionsContainer"></div>
+
+    </main>
+
+  </div>
+
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      updateDoc,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    import {
+      getAuth
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyA_UWA9DlrnbVlSNQrTBkZANiviRO5-vnI",
+
+      authDomain: "match-ou-desmatch.firebaseapp.com",
+
+      projectId: "match-ou-desmatch",
+
+      storageBucket: "match-ou-desmatch.firebasestorage.app",
+
+      messagingSenderId: "256858416779",
+
+      appId: "1:256858416779:web:19c260ba183886a7c2d68e"
+
+    };
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getFirestore(app);
+
+    const auth = getAuth(app);
+
+    const params = new URLSearchParams(window.location.search);
+
+    const roomCode = params.get("room");
+
+    const roomCodeText = document.getElementById("roomCodeText");
+
+    const statusText = document.getElementById("statusText");
+
+    const gameContainer = document.getElementById("gameContainer");
+
+    const questionTitle = document.getElementById("questionTitle");
+
+    const optionsContainer = document.getElementById("optionsContainer");
+
+    const phaseText = document.getElementById("phaseText");
+
+    const scoreText = document.getElementById("scoreText");
+
+    const questionCount = document.getElementById("questionCount");
+
+    const timer = document.getElementById("timer");
+
+    roomCodeText.innerText = "Sala: " + roomCode;
+
+    const questions = [
+
+      {
+        question: "Quem deveria tomar iniciativa?",
+        options: [
+          "Quem convidou primeiro",
+          "Quem demonstra mais interesse",
+          "Os dois juntos",
+          "Ninguém"
+        ]
+      },
+
+      {
+        question: "Qual o melhor encontro?",
+        options: [
+          "Cinema",
+          "Praia",
+          "Restaurante",
+          "Shopping"
+        ]
+      },
+
+      {
+        question: "Quem se apega mais rápido?",
+        options: [
+          "Homem",
+          "Mulher",
+          "Os dois",
+          "Depende"
+        ]
+      },
+
+      {
+        question: "O que estraga um encontro?",
+        options: [
+          "Celular",
+          "Silêncio",
+          "Atraso",
+          "Falta de interesse"
+        ]
+      },
+
+      {
+        question: "Qual o encontro ideal?",
+        options: [
+          "Caseiro",
+          "Aventura",
+          "Romântico",
+          "Engraçado"
+        ]
+      }
+
+    ];
+
+    let currentQuestion = 0;
+
+    let phase = "answer";
+
+    let points = 0;
+
+    let streak = 0;
+
+    let maxStreak = 0;
+
+    let wrongAnswers = 0;
+
+    let correctAnswers = 0;
+
+    // TIMER
+    function reiniciarTimer(){
+
+      timer.classList.remove("timer-animar");
+
+      void timer.offsetWidth;
+
+      timer.classList.add("timer-animar");
+
+    }
+
+    function updateHud(){
+
+      scoreText.innerText = points;
+
+      questionCount.innerText = `
+        ${currentQuestion + 1} / ${questions.length}
+      `;
+
+    }
+
+    function animateTransition(callback){
+
+      gameContainer.classList.add("fade-out");
+
+      setTimeout(() => {
+
+        callback();
+
+        gameContainer.classList.remove("fade-out");
+
+        gameContainer.classList.add("fade-in");
+
+        setTimeout(() => {
+
+          gameContainer.classList.remove("fade-in");
+
+        }, 400);
+
+      }, 400);
+
+    }
+
+    function renderQuestion(){
+
+      reiniciarTimer();
+
+      updateHud();
+
+      const question = questions[currentQuestion];
+
+      questionTitle.innerText = question.question;
+
+      optionsContainer.innerHTML = "";
+
+      question.options.forEach((option, index) => {
+
+        const button = document.createElement("button");
+
+        button.classList.add("option-btn");
+
+        button.innerText = option;
+
+        button.addEventListener("click", () => {
+
+          animateTransition(() => {
+
+            if(phase === "answer"){
+
+              saveAnswer(index);
+
+            }else{
+
+              checkGuess(index);
+
+            }
+
+          });
+
+        });
+
+        optionsContainer.appendChild(button);
+
+      });
+
+    }
+
+    async function saveAnswer(answerIndex){
+
+      const user = auth.currentUser;
+
+      const roomRef = doc(db, "rooms", roomCode);
+
+      const roomSnap = await getDoc(roomRef);
+
+      const roomData = roomSnap.data();
+
+      if(!roomData.answers){
+
+        roomData.answers = {};
+
+      }
+
+      if(!roomData.answers[user.uid]){
+
+        roomData.answers[user.uid] = {};
+
+      }
+
+      roomData.answers[user.uid][currentQuestion] = answerIndex;
+
+      await updateDoc(roomRef, {
+
+        answers: roomData.answers
+
+      });
+
+      currentQuestion++;
+
+      if(currentQuestion >= questions.length){
+
+        phase = "guess";
+
+        currentQuestion = 0;
+
+        phaseText.classList.add("phase-change");
+
+        phaseText.innerText = "Adivinhe as respostas do outro jogador";
+
+        setTimeout(() => {
+
+          phaseText.classList.remove("phase-change");
+
+        }, 800);
+
+        renderQuestion();
+
+        return;
+
+      }
+
+      renderQuestion();
+
+    }
+
+    async function checkGuess(selectedIndex){
+
+      const user = auth.currentUser;
+
+      const roomRef = doc(db, "rooms", roomCode);
+
+      const roomSnap = await getDoc(roomRef);
+
+      const roomData = roomSnap.data();
+
+      const players = Object.keys(roomData.players);
+
+      const opponentId = players.find(id => id !== user.uid);
+
+      const correctAnswer = roomData.answers[opponentId][currentQuestion];
+
+      if(selectedIndex == correctAnswer){
+
+        correctAnswers++;
+
+        streak++;
+
+        if(streak > maxStreak){
+
+          maxStreak = streak;
+
+        }
+
+        let earnedPoints = 100;
+
+        if(streak >= 2){
+
+          earnedPoints += streak * 50;
+
+        }
+
+        if(streak >= 5){
+
+          earnedPoints += 300;
+
+        }
+
+        points += earnedPoints;
+
+      }else{
+
+        streak = 0;
+
+        wrongAnswers++;
+
+        points -= 50;
+
+        if(points < 0){
+
+          points = 0;
+
+        }
+
+      }
+
+      currentQuestion++;
+
+      if(currentQuestion >= questions.length){
+
+        let title = "Boa conexão";
+
+        let emoji = "💖";
+
+        if(points >= 1200){
+
+          title = "ALMAS GÊMEAS";
+
+          emoji = "🔥";
+
+        }
+
+        else if(points >= 800){
+
+          title = "Match Perfeito";
+
+          emoji = "💘";
+
+        }
+
+        else if(points >= 500){
+
+          title = "Quase um casal";
+
+          emoji = "💕";
+
+        }
+
+        gameContainer.innerHTML = `
+
+          <div class="result-box">
+
+            <h2>
+
+              ${emoji} ${title}
+
+            </h2>
+
+            <p class="final-score">
+
+              ${points} pontos
+
+            </p>
+
+            <p>
+
+              Acertos:
+              ${correctAnswers}
+
+            </p>
+
+            <p>
+
+              Maior streak:
+              ${maxStreak}
+
+            </p>
+
+            <p>
+
+              Erros:
+              ${wrongAnswers}
+
+            </p>
+
+            <button class="back-btn" onclick="window.history.back()">
+
+              Voltar
+
+            </button>
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+      renderQuestion();
+
+    }
+
+    onSnapshot(doc(db, "rooms", roomCode), (snapshot) => {
+
+      const data = snapshot.data();
+
+      if(!data) return;
+
+      const playersCount = Object.keys(data.players).length;
+
+      if(playersCount >= 2){
+
+        statusText.innerText = "Jogador encontrado!";
+
+        gameContainer.style.display = "block";
+
+        renderQuestion();
+
+      }
+
+    });
+
+  </script>
+
+
+<script>
+
+if ("serviceWorker" in navigator) {
+
+  navigator.serviceWorker.register("./sw.js");
+
+}
+
+</script>
+</body>
+</html>

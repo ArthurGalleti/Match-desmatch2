@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Match ou Desmatch- Login e Cadastro</title>
+
+  <link rel="stylesheet" href="../estilos/style.css">
+
+  <link rel="icon" type="image/png" href="Captura_de_tela_2026-05-09_164629-removebg-preview (1).png">
+
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#317EFB">
+
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
+<link rel="manifest" href="manifest.json">
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      // Registramos sem a "/" inicial para ele respeitar a pasta atual
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('PWA: Service Worker ativo no escopo:', reg.scope))
+        .catch(err => console.error('PWA: Erro ao registrar:', err));
+    });
+  }
+</script>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="logo">
+      <img src="Captura_de_tela_2026-05-09_164629-removebg-preview (1).png" alt="" class="logo-img">
+    </div>
+
+    <h2>JOGUE AGORA</h2>
+
+    <div class="buttons">
+
+      <button id="btnLogin" class="active">
+        ENTRAR
+      </button>
+
+      <div class="divider">
+        <span>OU</span>
+      </div>
+
+      <button id="btnCadastro">
+        CADASTRAR
+      </button>
+
+    </div>
+
+    <!-- PAINEL LOGIN -->
+    <div class="panel active-panel" id="loginPanel">
+
+      <input
+        type="email"
+        placeholder="Seu email"
+        id="loginEmail"
+      >
+
+      <input
+        type="password"
+        placeholder="Sua senha"
+        id="loginSenha"
+      >
+
+      <button class="submit" id="loginSubmit">
+        ENTRAR
+      </button>
+
+    </div>
+
+    <!-- PAINEL CADASTRO -->
+    <div class="panel" id="cadastroPanel">
+
+      <input
+        type="text"
+        placeholder="Seu nome"
+        id="registrarNome"
+      >
+
+      <input
+        type="email"
+        placeholder="Seu email"
+        id="registrarEmail"
+      >
+
+      <input
+        type="password"
+        placeholder="Crie uma senha"
+        id="registrarSenha"
+      >
+
+      <button class="submit" id="registerSubmit">
+        CADASTRAR
+      </button>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    const btnLogin = document.getElementById("btnLogin");
+
+    const btnCadastro = document.getElementById("btnCadastro");
+
+    const loginPanel = document.getElementById("loginPanel");
+
+    const cadastroPanel = document.getElementById("cadastroPanel");
+
+
+    btnLogin.addEventListener("click", () => {
+
+      btnLogin.classList.add("active");
+
+      btnCadastro.classList.remove("active");
+
+      loginPanel.classList.add("active-panel");
+
+      cadastroPanel.classList.remove("active-panel");
+
+    });
+
+
+    btnCadastro.addEventListener("click", () => {
+
+      btnCadastro.classList.add("active");
+
+      btnLogin.classList.remove("active");
+
+      cadastroPanel.classList.add("active-panel");
+
+      loginPanel.classList.remove("active-panel");
+
+    });
+
+  </script>
+
+  <script type="module" src="../app.js"></script>
+
+
+  <script>
+
+if ("serviceWorker" in navigator) {
+
+  navigator.serviceWorker.register("./sw.js");
+
+}
+
+</script>
+</body>
+</html>
