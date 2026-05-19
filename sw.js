@@ -1,12 +1,12 @@
 const CACHE_NAME = 'match-v1';
 
 // Lista de arquivos para cache (ajuste os nomes se necessário)
-const resourcesToCache = [
-  './index.html',
-  './manifest.json',
-  '../estilos/sobre.css',
-  '../icons/icon-192.png',
-  '../icons/icon-512.png'
+const recursosToCache = [
+  "./index.html",
+  "./manifest.json",
+  "./estilos/sobre.css",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png"
 ];
 // Instalação: Salva os arquivos essenciais no navegador
 self.addEventListener('install', (event) => {
